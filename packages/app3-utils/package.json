@@ -5,7 +5,7 @@
   "description": "Collection of utility functions used in app3.js.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/daniel-apis/app3.js"
+    "url": "https://github.com/APIS-Platform/app3.js"
   },
   "license": "LGPL-3.0",
   "main": "src/index.js",

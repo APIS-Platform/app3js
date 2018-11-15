@@ -41,6 +41,6 @@ console.log(Apis3Utils);
 
 
 [docs]: https://app3js.readthedocs.io/en/latest
-[repo]: https://github.com/daniel-apis/app3.js
+[repo]: https://github.com/APIS-Platform/app3.js
 
 
