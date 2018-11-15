@@ -36,3 +36,5 @@ make.bat
 
 # node.js
 node_modules
+
+install-test
