@@ -1,0 +1,38 @@
+# local credentials
+credentials.properties
+
+# Vim
+*.sw[op]
+
+# Gradle
+.gradle
+build
+
+# IDEA
+.idea
+!.idea/codeStyleSettings.xml
+*.iml
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin
+
+# Maven
+*.log
+log/
+target/
+
+# Mac
+.DS_Store
+
+# Log
+logs
+
+# Doc
+make.bat
+
+# node.js
+node_modules
