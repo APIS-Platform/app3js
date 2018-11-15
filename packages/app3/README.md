@@ -9,7 +9,7 @@ Please read the main [readme](https://github.com/APIS-Platform/app3.js/README.md
 ### Node.js
 
 ```bash
-npm install app3
+npm install app3js
 ```
 
 [docs]: https://app3js.readthedocs.io/en/latest
