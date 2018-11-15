@@ -220,6 +220,24 @@ var toChecksumAddress = function (address) {
     return checksumAddress;
 };
 
+/**
+ * If the hex value prefix is not 0x, append 0x.
+ *
+ * @param hex {String} hex value
+ * @returns {String} Value prefixed with 0x
+ */
+var addPrefix0x = function (hex) {
+    if(typeof hex === undefined) return '';
+
+    if(hex != null && hex.length > 0 && !hex.startsWith('0x')) {
+        if(hex.length % 2 === 1) {
+            return '0x0' + hex;
+        } else {
+            return '0x' + hex;
+        }
+    }
+    return hex;
+}
 
 
 module.exports = {
@@ -272,6 +290,8 @@ module.exports = {
     leftPad: utils.leftPad,
     padRight: utils.rightPad,
     rightPad: utils.rightPad,
-    toTwosComplement: utils.toTwosComplement
+    toTwosComplement: utils.toTwosComplement,
+
+    addPrefix0x: addPrefix0x
 };
 
