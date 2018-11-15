@@ -43,7 +43,7 @@ account.create();
 ```
 
 
-[docs]: http://app3js.readthedocs.io/en/1.0/
-[repo]: https://github.com/apisereum/app3.js
+[docs]: https://app3js.readthedocs.io/en/latest
+[repo]: https://github.com/APIS-Platform/app3.js
 
 
