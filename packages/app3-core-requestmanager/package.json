@@ -2,7 +2,7 @@
   "dependencies": {
     "underscore": "1.8.3",
     "app3-core-helpers": "0.9.3",
-    "app3-providers-ws": "0.9.3"
+    "app3-providers-ws": "0.9.3-1"
   },
   "description": "App3 module to handle requests to external providers.",
   "license": "LGPL-3.0",
@@ -17,5 +17,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3"
+  "version": "0.9.3-1"
 }
