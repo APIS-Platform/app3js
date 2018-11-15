@@ -146,6 +146,11 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
         return Promise.reject(error);
     }
 
+    if(privateKey != null && privateKey.length > 2 && !privateKey.startsWith("0x")) {
+        privateKey = "0x" + privateKey;
+    }
+    console.log(privateKey);
+
     function signed (tx) {
 
         if (!tx.gas && !tx.gasLimit) {
