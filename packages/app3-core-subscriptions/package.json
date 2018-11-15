@@ -2,7 +2,7 @@
   "dependencies": {
     "eventemitter3": "1.1.1",
     "underscore": "1.8.3",
-    "app3-core-helpers": "0.9.3"
+    "app3-core-helpers": "^0.9.3"
   },
   "description": "Manages app3 subscriptions. This is an internal package.",
   "license": "LGPL-3.0",
@@ -17,5 +17,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3"
+  "version": "0.9.3-001"
 }

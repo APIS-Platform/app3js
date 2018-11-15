@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "underscore": "1.8.3",
-    "app3-core-helpers": "0.9.3",
+    "app3-core-helpers": "^0.9.3",
     "keccak": "1.4.0",
     "crypto-random-string":"1.0.0",
     "crypto-js":"3.1.9-1",
@@ -20,5 +20,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3-001"
+  "version": "0.9.3-002"
 }

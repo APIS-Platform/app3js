@@ -1,10 +1,10 @@
 {
   "dependencies": {
     "underscore": "1.8.3",
-    "app3-core-helpers": "0.9.3",
-    "app3-core-promievent": "0.9.3-1",
-    "app3-core-subscriptions": "0.9.3",
-    "app3-utils": "0.9.3"
+    "app3-core-helpers": "^0.9.3",
+    "app3-core-promievent": "^0.9.3-1",
+    "app3-core-subscriptions": "^0.9.3-1",
+    "app3-utils": "^0.9.3"
   },
   "deprecated": false,
   "description": "Creates the methods on the app3 modules. This is an internal package.",
@@ -20,5 +20,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3"
+  "version": "0.9.3-001"
 }

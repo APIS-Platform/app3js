@@ -1,16 +1,16 @@
 {
   "dependencies": {
     "underscore": "1.8.3",
-    "app3-core": "0.9.3",
-    "app3-core-helpers": "0.9.3",
-    "app3-core-method": "0.9.3",
-    "app3-core-subscriptions": "0.9.3",
-    "app3-apis-abi": "0.9.3",
-    "app3-apis-accounts": "0.9.3-1",
-    "app3-apis-contract": "0.9.3",
-    "app3-apis-personal": "0.9.3",
-    "app3-net": "0.9.3",
-    "app3-utils": "0.9.3"
+    "app3-core": "^0.9.3-3",
+    "app3-core-helpers": "^0.9.3-1",
+    "app3-core-method": "^0.9.3-1",
+    "app3-core-subscriptions": "^0.9.3-1",
+    "app3-apis-abi": "^0.9.3-1",
+    "app3-apis-accounts": "^0.9.3-2",
+    "app3-apis-contract": "^0.9.3-2",
+    "app3-apis-personal": "^0.9.3-2",
+    "app3-net": "^0.9.3-2",
+    "app3-utils": "^0.9.3"
   },
   "deprecated": false,
   "description": "App3 module to interact with the APIS blockchain and smart contracts.",
@@ -26,5 +26,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3"
+  "version": "0.9.3-002"
 }
