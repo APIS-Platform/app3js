@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "underscore": "1.8.3",
+    "app3-core": "0.9.3",
+    "app3-core-helpers": "0.9.3",
+    "app3-core-method": "0.9.3",
+    "app3-core-promievent": "0.9.3-1",
+    "app3-core-subscriptions": "0.9.3",
+    "app3-apis-abi": "0.9.3",
+    "app3-utils": "0.9.3"
+  },
+  "deprecated": false,
+  "description": "App3 module to interact with Ethereum smart contracts.",
+  "license": "LGPL-3.0",
+  "main": "src/index.js",
+  "name": "app3-apis-contract",
+  "namespace": "APIS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/APIS-Platform/app3.js"
+  },
+  "bugs": {
+    "url" : "https://github.com/APIS-Platform/app3.js/issues"
+  },
+  "homepage": "https://apisplatform.io",
+  "version": "0.9.3"
+}
