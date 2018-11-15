@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "app3-core-helpers": "0.9.3",
+    "app3-core-method": "0.9.3",
+    "app3-core-requestmanager": "0.9.3",
+    "app3-utils": "0.9.3"
+  },
+  "deprecated": false,
+  "description": "App3 core tools for sub packages. This is an internal package.",
+  "license": "LGPL-3.0",
+  "main": "src/index.js",
+  "name": "app3-core",
+  "namespace": "APIS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/APIS-Platform/app3.js"
+  },
+  "bugs": {
+    "url" : "https://github.com/APIS-Platform/app3.js/issues"
+  },
+  "homepage": "https://apisplatform.io",
+  "version": "0.9.3"
+}
