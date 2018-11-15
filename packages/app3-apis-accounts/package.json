@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "any-promise": "1.3.0",
+    "crypto-browserify": "3.12.0",
+    "eth-lib": "0.2.7",
+    "scrypt.js": "0.2.0",
+    "underscore": "1.8.3",
+    "uuid": "2.0.1",
+    "app3-core": "0.9.3",
+    "app3-core-helpers": "0.9.3",
+    "app3-core-method": "0.9.3",
+    "app3-utils": "0.9.3"
+  },
+  "description": "App3 module to generate APIS accounts and sign data and transactions.",
+  "license": "LGPL-3.0",
+  "main": "src/index.js",
+  "name": "app3-apis-accounts",
+  "namespace": "APIS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/APIS-Platform/app3.js"
+  },
+  "bugs": {
+    "url" : "https://github.com/APIS-Platform/app3.js/issues"
+  },
+  "homepage": "https://apisplatform.io",
+  "version": "0.9.3"
+}
