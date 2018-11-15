@@ -38,12 +38,20 @@ var Ws = null;
 var _btoa = null;
 var parseURL = null;
 if (typeof window !== 'undefined' && typeof window.WebSocket !== 'undefined') {
-    Ws = function Ws(url, protocols) {
-        return new window.WebSocket(url, protocols);
-    };
     _btoa = btoa;
     parseURL = function parseURL(url) {
         return new URL(url);
+    };
+
+    /*
+     * Encrypts the user ID and password, and sends it to the RPC server.
+     */
+    Ws = function Ws(url, protocols) {
+        let parsedUrl = parseURL(url);
+        let encryptedAuth = _btoa(crypt.encryptAuth(parsedUrl.username, parsedUrl.password));
+        let finalUrl = parsedUrl.origin + "?authkey=" + encryptedAuth;
+
+        return new window.WebSocket(finalUrl, protocols);
     };
 } else {
     Ws = require('websocket').w3cwebsocket;
@@ -80,8 +88,9 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
     var headers = options.headers || {};
     var protocol = options.protocol || undefined;
     if (parsedURL.username && parsedURL.password) {
-        // Id와 Password 정보를 암호화하여 전달한다.
+        // Encrypts the user ID and password, and sends it to the RPC server.
         headers.authKey = crypt.encryptAuth(parsedURL.username, parsedURL.password);
+
     }
 
     // Allow a custom client configuration

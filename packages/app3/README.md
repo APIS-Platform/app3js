@@ -1,4 +1,4 @@
-# app3
+# app3js
 
 This is a main package of [app3.js][repo]
 
