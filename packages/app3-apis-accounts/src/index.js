@@ -86,7 +86,7 @@ var Accounts = function Accounts() {
             call: 'apis_getTransactionCount',
             params: 2,
             inputFormatter: [function (address) {
-                address = utils.addPrefix0x(address);
+                //address = utils.addPrefix0x(address);
                 
                 if (utils.isAddress(address)) {
                     return address;
@@ -131,7 +131,7 @@ Accounts.prototype.create = function create(entropy) {
 };
 
 Accounts.prototype.privateKeyToAccount = function privateKeyToAccount(privateKey) {
-    privateKey = utils.addPrefix0x(privateKey);
+    //privateKey = utils.addPrefix0x(privateKey);
     return this._addAccountFunctions(Account.fromPrivate(privateKey));
 };
 
@@ -149,7 +149,7 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
         return Promise.reject(error);
     }
 
-    privateKey = utils.addPrefix0x(privateKey);
+    //privateKey = utils.addPrefix0x(privateKey);
 
     function signed (tx) {
 
@@ -380,7 +380,7 @@ Accounts.prototype.hashMessage = function hashMessage(data) {
 };
 
 Accounts.prototype.sign = function sign(data, privateKey) {
-    privateKey = utils.addPrefix0x(privateKey);
+    //privateKey = utils.addPrefix0x(privateKey);
 
     var hash = this.hashMessage(data);
     var signature = Account.sign(hash, privateKey);
@@ -464,7 +464,7 @@ Accounts.prototype.decrypt = function (v3Keystore, password, nonStrict) {
 
 Accounts.prototype.encrypt = function (privateKey, password, options) {
     /* jshint maxcomplexity: 20 */
-    privateKey = utils.addPrefix0x(privateKey);
+    //privateKey = utils.addPrefix0x(privateKey);
     var account = this.privateKeyToAccount(privateKey);
 
     options = options || {};
