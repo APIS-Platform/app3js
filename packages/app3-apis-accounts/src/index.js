@@ -62,7 +62,7 @@ var Accounts = function Accounts() {
     delete this.BatchRequest;
     delete this.extend;
 
-    var _ethereumCall = [
+    var _apisCall = [
         new Method({
             name: 'getId',
             call: 'net_version',
@@ -96,10 +96,10 @@ var Accounts = function Accounts() {
             }, function () { return 'latest'; }]
         })
     ];
-    // attach methods to this._ethereumCall
-    this._ethereumCall = {};
-    _.each(_ethereumCall, function (method) {
-        method.attachToObject(_this._ethereumCall);
+    // attach methods to this._apisCall
+    this._apisCall = {};
+    _.each(_apisCall, function (method) {
+        method.attachToObject(_this._apisCall);
         method.setRequestManager(_this._requestManager);
     });
 
@@ -131,6 +131,7 @@ Accounts.prototype.create = function create(entropy) {
 };
 
 Accounts.prototype.privateKeyToAccount = function privateKeyToAccount(privateKey) {
+    privateKey = utils.addPrefix0x(privateKey);
     return this._addAccountFunctions(Account.fromPrivate(privateKey));
 };
 
@@ -148,10 +149,7 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
         return Promise.reject(error);
     }
 
-    if(privateKey != null && privateKey.length > 2 && !privateKey.startsWith("0x")) {
-        privateKey = "0x" + privateKey;
-    }
-    console.log(privateKey);
+    privateKey = utils.addPrefix0x(privateKey);
 
     function signed (tx) {
 
@@ -241,10 +239,10 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
 
     // Otherwise, get the missing info from the Ethereum Node
     return Promise.all([
-        isNot(tx.chainId) ? _this._ethereumCall.getId() : tx.chainId,
-        isNot(tx.gasPrice) ? _this._ethereumCall.getGasPrice() : tx.gasPrice,
-        isNot(tx.gas) ? _this._ethereumCall.estimateGas(tx) : tx.gas,
-        isNot(tx.nonce) ? _this._ethereumCall.getTransactionCount(_this.privateKeyToAccount(privateKey).address) : tx.nonce
+        isNot(tx.chainId) ? _this._apisCall.getId() : tx.chainId,
+        isNot(tx.gasPrice) ? _this._apisCall.getGasPrice() : tx.gasPrice,
+        isNot(tx.gas) ? _this._apisCall.estimateGas(tx) : tx.gas,
+        isNot(tx.nonce) ? _this._apisCall.getTransactionCount(_this.privateKeyToAccount(privateKey).address) : tx.nonce
     ]).then(function (args) {
         if (isNot(args[0]) || isNot(args[1]) || isNot(args[2]) || isNot(args[3])) {
             throw new Error('One of the values "chainId", "gasPrice", "gasLimit" or "nonce" couldn\'t be fetched: '+ JSON.stringify(args));
@@ -346,9 +344,9 @@ Accounts.prototype.authTransaction = function authTransaction(tx, knowledgeKey, 
 
     // Otherwise, get the missing info from the Ethereum Node
     return Promise.all([
-        isNot(tx.chainId) ? _this._ethereumCall.getId() : tx.chainId,
-        isNot(tx.gasPrice) ? _this._ethereumCall.getGasPrice() : tx.gasPrice,
-        isNot(tx.nonce) ? _this._ethereumCall.getTransactionCount(_this.privateKeyToAccount(privateKey).address) : tx.nonce
+        isNot(tx.chainId) ? _this._apisCall.getId() : tx.chainId,
+        isNot(tx.gasPrice) ? _this._apisCall.getGasPrice() : tx.gasPrice,
+        isNot(tx.nonce) ? _this._apisCall.getTransactionCount(_this.privateKeyToAccount(privateKey).address) : tx.nonce
     ]).then(function (args) {
         if (isNot(args[0]) || isNot(args[1]) || isNot(args[2])) {
             throw new Error('One of the values "chainId", "gasPrice", or "nonce" couldn\'t be fetched: '+ JSON.stringify(args));
@@ -382,6 +380,8 @@ Accounts.prototype.hashMessage = function hashMessage(data) {
 };
 
 Accounts.prototype.sign = function sign(data, privateKey) {
+    privateKey = utils.addPrefix0x(privateKey);
+
     var hash = this.hashMessage(data);
     var signature = Account.sign(hash, privateKey);
     var vrs = Account.decodeSignature(signature);
@@ -464,6 +464,7 @@ Accounts.prototype.decrypt = function (v3Keystore, password, nonStrict) {
 
 Accounts.prototype.encrypt = function (privateKey, password, options) {
     /* jshint maxcomplexity: 20 */
+    privateKey = utils.addPrefix0x(privateKey);
     var account = this.privateKeyToAccount(privateKey);
 
     options = options || {};
