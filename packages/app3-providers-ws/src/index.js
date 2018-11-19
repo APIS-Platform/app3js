@@ -29,10 +29,6 @@ var crypt = require('./crypt');
 var _ = require('underscore');
 var errors = require('app3-core-helpers').errors;
 
-// RPC 서버와 통신할 때 사용하는 암호화 토큰
-var token = null;
-
-var requestId = 0;
 
 var Ws = null;
 var _btoa = null;
@@ -49,7 +45,7 @@ if (typeof window !== 'undefined' && typeof window.WebSocket !== 'undefined') {
     Ws = function Ws(url, protocols) {
         let parsedUrl = parseURL(url);
         let encryptedAuth = _btoa(crypt.encryptAuth(parsedUrl.username, parsedUrl.password));
-        let finalUrl = parsedUrl.origin + "?authkey=" + encryptedAuth;
+        let finalUrl = url+ "?authkey=" + encryptedAuth;
 
         return new window.WebSocket(finalUrl, protocols);
     };
@@ -78,6 +74,11 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
     this.responseCallbacks = {};
     this.notificationCallbacks = [];
 
+    this.userpass = '';
+    this.password = '';
+    this.token = '';
+    this.requestId = 0;
+
     options = options || {};
     this._customTimeout = options.timeout;
 
@@ -88,9 +89,11 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
     var headers = options.headers || {};
     var protocol = options.protocol || undefined;
     if (parsedURL.username && parsedURL.password) {
-        // Encrypts the user ID and password, and sends it to the RPC server.
-        headers.authKey = crypt.encryptAuth(parsedURL.username, parsedURL.password);
+        _this.username = parsedURL.username;
+        _this.userpass = parsedURL.password;
 
+        // Encrypts the user ID and password, and sends it to the RPC server.
+        headers.authKey = crypt.encryptAuth(_this.username, _this.userpass);
     }
 
     // Allow a custom client configuration
@@ -114,10 +117,10 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
             console.log();
         }
 
-        if(token == null) {
-            token = crypt.decryptToken(data);
+        if(_this.token === '') {
+            _this.token = crypt.decryptToken(_this.userpass, data);
             if(isDebug) {
-                console.log('Token received : ' + token.substring(0, 4) + "..." + token.substring(token.length - 4, token.length));
+                console.log('Token received : ' + _this.token.substring(0, 4) + "..." + _this.token.substring(_this.token.length - 4, _this.token.length));
             }
             return;
         }
@@ -135,13 +138,13 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
                 id = result.id;
             }
 
-            if(typeof result.result !== undefined && result.result == 'null') {
+            if(typeof result.result !== undefined && result.result === 'null') {
                 result.result = null;
             }
 
             if(isDebug) {
                 console.log();
-                console.log("[provider-ws:124]");
+                console.log("[provider-ws]");
                 console.log(result);
                 console.log();
             }
@@ -203,7 +206,7 @@ WebsocketProvider.prototype._parseResponse = function (data) {
     var _this = this,
         returnValues = [];
 
-    data = crypt.decryptMessage(data, token);
+    data = crypt.decryptMessage(data, _this.token);
     data = JSON.stringify(data);
 
     // DE-CHUNKER
@@ -289,19 +292,20 @@ WebsocketProvider.prototype._timeout = function () {
 WebsocketProvider.prototype.send = function (payload, callback) {
     var _this = this;
 
-    if (this.connection.readyState === this.connection.CONNECTING || token === null) {
+    if (this.connection.readyState === this.connection.CONNECTING || _this.token === '') {
         setTimeout(function () {
             _this.send(payload, callback);
         }, 10);
         return;
     }
 
-    requestId += 1;
-    var encMessage = crypt.encryptMessage(requestId, payload, token);
+    _this.requestId += 1;
+
+    var encMessage = crypt.encryptMessage(_this.requestId, payload, _this.token);
 
     if(isDebug) {
         console.log();
-        console.log("PAYLOAD---- TOKEN : " + token);
+        console.log("PAYLOAD---- TOKEN : " + _this.token);
         console.log(payload);
         console.log();
         console.log("ENCRYPTED MESSAGE : ");

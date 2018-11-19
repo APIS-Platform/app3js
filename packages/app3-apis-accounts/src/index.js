@@ -86,6 +86,8 @@ var Accounts = function Accounts() {
             call: 'apis_getTransactionCount',
             params: 2,
             inputFormatter: [function (address) {
+                address = utils.addPrefix0x(address);
+                
                 if (utils.isAddress(address)) {
                     return address;
                 } else {

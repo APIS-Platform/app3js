@@ -177,18 +177,16 @@ var getIv = function getIv(msg) {
 };
 
 
-var userPassword = null;
 
 var encryptAuth = exports.encryptAuth = function encryptAuth(id, passwd) {
     var hashedId      = (0, _keccak2.default)('keccak256').update(id).digest('hex');
     var hashedPasswd  = (0, _keccak2.default)('keccak256').update(passwd).digest('hex');
-    userPassword = passwd;
 
     return encryptMsg(hashedPasswd, hashedId);
 }
 
 
-var decryptToken = exports.decryptToken = function decryptToken(message) {
+var decryptToken = exports.decryptToken = function decryptToken(userPassword, message) {
     var data = message;
 
     if(message.utf8Data !== undefined) {
