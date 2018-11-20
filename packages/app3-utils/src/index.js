@@ -41,7 +41,11 @@ var _fireError = function (error, emitter, reject, callback) {
 
     // add data if given
     if(_.isObject(error) && !(error instanceof Error) &&  error.data) {
-        if(_.isObject(error.data) || _.isArray(error.data)) {
+
+        if(error.data.message !== undefined && _.isString(error.data.message)) {
+            error.data = error.data.message;
+        }
+        else if(_.isObject(error.data) || _.isArray(error.data)) {
             error.data = JSON.stringify(error.data, null, 2);
         }
 
@@ -60,7 +64,7 @@ var _fireError = function (error, emitter, reject, callback) {
         // OR suppress uncatched error if an callback listener is present
         if (emitter &&
             (_.isFunction(emitter.listeners) &&
-            emitter.listeners('error').length) || _.isFunction(callback)) {
+                emitter.listeners('error').length) || _.isFunction(callback)) {
             emitter.catch(function(){});
         }
         // reject later, to be able to return emitter
