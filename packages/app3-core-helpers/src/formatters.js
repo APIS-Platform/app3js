@@ -196,14 +196,13 @@ var outputTransactionFormatter = function (tx){
  * @returns {Object}
 */
 var outputTransactionReceiptFormatter = function (receipt){
+    if(receipt === 'null') {
+        return null;
+    }
+
     if(typeof receipt !== 'object') {
         throw new Error('Received receipt is invalid: '+ receipt);
     }
-
-    if(receipt == 'null') {
-        receipt = null;
-    }
-
 
     if(receipt.blockNumber !== null)
         receipt.blockNumber = utils.hexToNumber(receipt.blockNumber);
