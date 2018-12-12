@@ -22,7 +22,7 @@
 
 "use strict";
 
-const isDebug = false;
+const isDebug = true;
 
 var crypt = require('./crypt');
 
@@ -100,6 +100,10 @@ var WebsocketProvider = function WebsocketProvider(url, options) {
     var clientConfig = options.clientConfig || undefined;
 
     this.connection = new Ws(url, protocol, undefined, headers, undefined, clientConfig);
+
+    // 웹소켓 통신 시 AES 암호화를 적용할지 여부를 저장한다.
+    // It stores whether or not to apply AES encryption in ws communication.
+    this.messageEncryptionEnabled = true;
 
     this.addDefaultEvents();
 
@@ -206,15 +210,17 @@ WebsocketProvider.prototype._parseResponse = function (data) {
     var _this = this,
         returnValues = [];
 
-    data = crypt.decryptMessage(data, _this.token);
-    data = JSON.stringify(data);
+    if(!isJsonString(data)) {
+        data = crypt.decryptMessage(data, _this.token);
+        data = JSON.stringify(data);
+    }
 
     // DE-CHUNKER
     var dechunkedData = data.replace(/\}[\n\r]?\{/g, '}|--|{') // }{
-    .replace(/\}\][\n\r]?\[\{/g, '}]|--|[{') // }][{
-    .replace(/\}[\n\r]?\[\{/g, '}|--|[{') // }[{
-    .replace(/\}\][\n\r]?\{/g, '}]|--|{') // }]{
-    .split('|--|');
+        .replace(/\}\][\n\r]?\[\{/g, '}]|--|[{') // }][{
+        .replace(/\}[\n\r]?\[\{/g, '}|--|[{') // }[{
+        .replace(/\}\][\n\r]?\{/g, '}]|--|{') // }]{
+        .split('|--|');
 
     dechunkedData.forEach(function (data) {
 
@@ -248,6 +254,15 @@ WebsocketProvider.prototype._parseResponse = function (data) {
 
     return returnValues;
 };
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 
 /**
  Adds a callback to the responseCallbacks object,
@@ -289,6 +304,12 @@ WebsocketProvider.prototype._timeout = function () {
     }
 };
 
+WebsocketProvider.prototype.enableEncryption = function (enable) {
+    const _this = this;
+
+    _this.messageEncryptionEnabled = enable;
+}
+
 WebsocketProvider.prototype.send = function (payload, callback) {
     var _this = this;
 
@@ -301,15 +322,22 @@ WebsocketProvider.prototype.send = function (payload, callback) {
 
     _this.requestId += 1;
 
-    var encMessage = crypt.encryptMessage(_this.requestId, payload, _this.token);
+
+    var message;
+    if(_this.messageEncryptionEnabled) {
+        message = crypt.encryptMessage(_this.requestId, payload, _this.token);
+    } else {
+        message = crypt.normalMessage(_this.requestId, payload, _this.token);
+    }
 
     if(isDebug) {
         console.log();
-        console.log("PAYLOAD---- TOKEN : " + _this.token);
+        console.log("TOKEN : " + _this.token);
+        console.log("PAYLOAD :");
         console.log(payload);
         console.log();
-        console.log("ENCRYPTED MESSAGE : ");
-        console.log(encMessage);
+        console.log("SENDING MESSAGE : ");
+        console.log(message);
         console.log();
         console.log();
     }
@@ -328,9 +356,7 @@ WebsocketProvider.prototype.send = function (payload, callback) {
         return;
     }
 
-
-    //this.connection.send(JSON.stringify(encMessage));
-    this.connection.send(encMessage);
+    this.connection.send(message);
     this._addResponseCallback(payload, callback);
 };
 

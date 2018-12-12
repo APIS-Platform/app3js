@@ -5,7 +5,7 @@ const isDebug = false;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.decryptMessage = exports.encryptMessage = exports.decryptToken = exports.sendAuthMsg = undefined;
+exports.decryptMessage = exports.encryptMessage = exports.decryptToken = exports.sendAuthMsg = exports.normalMessage = undefined;
 
 var _cryptoRandomString = require('crypto-random-string');
 
@@ -226,6 +226,21 @@ var encryptMessage = exports.encryptMessage = function encryptMessage(nonce, pay
 
   var sendMsg = encryptMsg(token, JSON.stringify(msgObj));
   return sendMsg;
+};
+
+const normalMessage = exports.normalMessage = function normalMessage(nonce, payload, token) {
+    const tokenHash = createTokenHash(payload, token);//encryptMsg(userPassword, token);
+
+    const msgObj = {
+        "hash": tokenHash,
+        "payload": payload
+    };
+
+    if(isDebug) {
+        console.log(msgObj);
+    }
+
+    return JSON.stringify(msgObj);
 };
 
 var decryptMessage = exports.decryptMessage = function decryptMessage(message, token) {
