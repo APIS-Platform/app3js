@@ -304,6 +304,14 @@ WebsocketProvider.prototype._timeout = function () {
     }
 };
 
+/**
+ * 기능을 활성화할 경우 RPC 서버와 주고받는 모든 메시지가 암호화된다.
+ * 암호화 통신은 비암호화 통신 대비 30배 이상의 시간이 더 소요되므로 신중한 선택이 필요하다.
+ * When enabled, all messages to and from the RPC server are encrypted.
+ * If encryption is applied, it should take more than 30 times more time than plain text communication.
+ *
+ * @param enable TRUE : Encryption is applied to outgoing and incoming messages.
+ */
 WebsocketProvider.prototype.enableEncryption = function (enable) {
     const _this = this;
 

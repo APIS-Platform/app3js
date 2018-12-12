@@ -3,7 +3,7 @@
 const isDebug = false;
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.decryptMessage = exports.encryptMessage = exports.decryptToken = exports.sendAuthMsg = exports.normalMessage = undefined;
 
@@ -36,13 +36,13 @@ function toUTF8Array(str) {
         var charcode = str.charCodeAt(i);
         if (charcode < 0x80) utf8.push(charcode);
         else if (charcode < 0x800) {
-            utf8.push(0xc0 | (charcode >> 6), 
-                      0x80 | (charcode & 0x3f));
+            utf8.push(0xc0 | (charcode >> 6),
+                0x80 | (charcode & 0x3f));
         }
         else if (charcode < 0xd800 || charcode >= 0xe000) {
-            utf8.push(0xe0 | (charcode >> 12), 
-                      0x80 | ((charcode>>6) & 0x3f), 
-                      0x80 | (charcode & 0x3f));
+            utf8.push(0xe0 | (charcode >> 12),
+                0x80 | ((charcode>>6) & 0x3f),
+                0x80 | (charcode & 0x3f));
         }
         // surrogate pair
         else {
@@ -51,11 +51,11 @@ function toUTF8Array(str) {
             // subtracting 0x10000 and splitting the
             // 20 bits of 0x0-0xFFFFF into two halves
             charcode = 0x10000 + (((charcode & 0x3ff)<<10)
-                      | (str.charCodeAt(i) & 0x3ff));
-            utf8.push(0xf0 | (charcode >>18), 
-                      0x80 | ((charcode>>12) & 0x3f), 
-                      0x80 | ((charcode>>6) & 0x3f), 
-                      0x80 | (charcode & 0x3f));
+                | (str.charCodeAt(i) & 0x3ff));
+            utf8.push(0xf0 | (charcode >>18),
+                0x80 | ((charcode>>12) & 0x3f),
+                0x80 | ((charcode>>6) & 0x3f),
+                0x80 | (charcode & 0x3f));
         }
     }
     return utf8;
@@ -125,14 +125,14 @@ var encryptMsg = function encryptMsg(passPhrase, plainText) {
 };
 
 function createTokenHash(payload, token) {
-	var method = payload["method"];
-	var params = payload.params;
-	var payId = payload["id"];
+    var method = payload["method"];
+    var params = payload.params;
+    var payId = payload["id"];
 
 
-	var paramsStr = "";
-	for(var i = 0; i < params.length; i++) {
-	    if(params[i] !== null && typeof params[i] === 'object') {
+    var paramsStr = "";
+    for(var i = 0; i < params.length; i++) {
+        if(params[i] !== null && typeof params[i] === 'object') {
             const ordered = {};
             Object.keys(params[i]).sort().forEach(function(key) {
                 var value = params[i][key];
@@ -150,30 +150,30 @@ function createTokenHash(payload, token) {
     }
     paramsStr = paramsStr.replace(/['":=, ]+/g, "");
 
-	if(isDebug) {
+    if(isDebug) {
         console.log();
         console.log("[crypt.js] Token Hash Parameter : ");
         console.log(paramsStr);
         console.log();
     }
 
-	var arrMethod = toUTF8Array(String(method));
-	var arrParams = toUTF8Array(paramsStr);
-	var arrPayId = longToByteArray(Number(payId));
+    var arrMethod = toUTF8Array(String(method));
+    var arrParams = toUTF8Array(paramsStr);
+    var arrPayId = longToByteArray(Number(payId));
 
-	let merge = concatenate(Uint8Array, arrMethod, arrParams, arrPayId, hexToBytes(token));
+    let merge = concatenate(Uint8Array, arrMethod, arrParams, arrPayId, hexToBytes(token));
 
-	return (0, _keccak2.default)('keccak256').update(new Buffer(merge, 'hex')).digest('hex');
+    return (0, _keccak2.default)('keccak256').update(new Buffer(merge, 'hex')).digest('hex');
 }
 
 var decryptMsg = function decryptMsg(salt, iv, passPhrase, plainText) {
-  return aesUtil.decrypt(salt, iv, passPhrase, plainText);
+    return aesUtil.decrypt(salt, iv, passPhrase, plainText);
 };
 var getSalt = function getSalt(msg) {
-  return msg.substring(0, 64);
+    return msg.substring(0, 64);
 };
 var getIv = function getIv(msg) {
-  return msg.substring(64, 96);
+    return msg.substring(64, 96);
 };
 
 
@@ -190,42 +190,42 @@ var decryptToken = exports.decryptToken = function decryptToken(userPassword, me
     var data = message;
 
     if(message.utf8Data !== undefined) {
-      data = message.utf8Data;
+        data = message.utf8Data;
     }
 
     var resSalt = getSalt(data);
     var resIv = getIv(data);
     var receiveMsg = data.replace(resSalt, '').replace(resIv, '');
-	var receiveMsgDec = decryptMsg(resSalt, resIv, userPassword, receiveMsg);
+    var receiveMsgDec = decryptMsg(resSalt, resIv, userPassword, receiveMsg);
 
     try {
         var tokenMsgObj = JSON.parse(receiveMsgDec);
     } catch (e) {
         throw Error(data);
     }
-	var tokenEnc = tokenMsgObj.result;
-	
-	var deTokenSalt = getSalt(tokenEnc);
-	var deTokenIv = getIv(tokenEnc);
-	var deToken = tokenEnc.replace(deTokenSalt, '').replace(deTokenIv, '');
+    var tokenEnc = tokenMsgObj.result;
+
+    var deTokenSalt = getSalt(tokenEnc);
+    var deTokenIv = getIv(tokenEnc);
+    var deToken = tokenEnc.replace(deTokenSalt, '').replace(deTokenIv, '');
 
     return decryptMsg(deTokenSalt, deTokenIv, userPassword, deToken);
 };
 
 var encryptMessage = exports.encryptMessage = function encryptMessage(nonce, payload, token) {
-  var tokenHash = createTokenHash(payload, token);//encryptMsg(userPassword, token);
+    var tokenHash = createTokenHash(payload, token);//encryptMsg(userPassword, token);
 
-  var msgObj = {
-      "hash": tokenHash,
-      "payload": payload
-  };
+    var msgObj = {
+        "hash": tokenHash,
+        "payload": payload
+    };
 
-  if(isDebug) {
-      console.log(msgObj);
-  }
+    if(isDebug) {
+        console.log(msgObj);
+    }
 
-  var sendMsg = encryptMsg(token, JSON.stringify(msgObj));
-  return sendMsg;
+    var sendMsg = encryptMsg(token, JSON.stringify(msgObj));
+    return sendMsg;
 };
 
 const normalMessage = exports.normalMessage = function normalMessage(nonce, payload, token) {
@@ -244,10 +244,10 @@ const normalMessage = exports.normalMessage = function normalMessage(nonce, payl
 };
 
 var decryptMessage = exports.decryptMessage = function decryptMessage(message, token) {
-  var salt = getSalt(message);
-  var iv = getIv(message);
-  var msg = message.replace(salt, '').replace(iv, '');
-  var decMsg = decryptMsg(salt, iv, token, msg);
+    var salt = getSalt(message);
+    var iv = getIv(message);
+    var msg = message.replace(salt, '').replace(iv, '');
+    var decMsg = decryptMsg(salt, iv, token, msg);
 
-  return JSON.parse(decMsg);
+    return JSON.parse(decMsg);
 };
