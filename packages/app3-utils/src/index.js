@@ -233,15 +233,16 @@ var toChecksumAddress = function (address) {
 var addPrefix0x = function (hex) {
     if(typeof hex === undefined) return '';
 
-    if(hex != null && hex.length > 0 && !hex.startsWith('0x')) {
+    if(utils.isHex(hex) && !utils.isHexStrict(hex)) {
         if(hex.length % 2 === 1) {
             return '0x0' + hex;
         } else {
             return '0x' + hex;
         }
     }
+
     return hex;
-}
+};
 
 
 module.exports = {
