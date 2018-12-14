@@ -131,7 +131,7 @@ Accounts.prototype.create = function create(entropy) {
 };
 
 Accounts.prototype.privateKeyToAccount = function privateKeyToAccount(privateKey) {
-    //privateKey = utils.addPrefix0x(privateKey);
+    privateKey = utils.addPrefix0x(privateKey);
     return this._addAccountFunctions(Account.fromPrivate(privateKey));
 };
 
