@@ -22,7 +22,7 @@
 
 "use strict";
 
-const isDebug = true;
+const isDebug = false;
 
 var crypt = require('./crypt');
 
