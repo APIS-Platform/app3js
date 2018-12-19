@@ -318,7 +318,7 @@ var Apis = function Apis() {
             name: 'getTransactionsByKeyword',
             call: 'apis_getTransactionsByKeyword',
             params: 3,
-            inputFormatter: [formatter.inputAddressFormatter, utils.numberToHex, utils.numberToHex]
+            inputFormatter: [null, utils.numberToHex, utils.numberToHex]
         }),
 
         // subscriptions
