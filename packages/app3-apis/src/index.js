@@ -47,7 +47,7 @@ var getBlockTransactionCountCall = function (args) {
 };
 
 
-var Eth = function Eth() {
+var Apis = function Apis() {
     var _this = this;
 
     // sets _requestmanager
@@ -133,8 +133,8 @@ var Eth = function Eth() {
     var Contract = function Contract() {
         BaseContract.apply(this, arguments);
 
-        // when Eth.setProvider is called, call packageInit
-        // on all contract instances instantiated via this Eth
+        // when Apis.setProvider is called, call packageInit
+        // on all contract instances instantiated via this Apis
         // instances. This will update the currentProvider for
         // the contract instances
         var _this = this;
@@ -314,6 +314,12 @@ var Eth = function Eth() {
             inputFormatter: [formatter.inputLogFormatter],
             outputFormatter: formatter.outputLogFormatter
         }),
+        new Method({
+            name: 'getTransactionsByKeyword',
+            call: 'apis_getTransactionsByKeyword',
+            params: 3,
+            inputFormatter: [formatter.inputAddressFormatter, utils.numberToHex, utils.numberToHex]
+        }),
 
         // subscriptions
         new Subscriptions({
@@ -359,8 +365,8 @@ var Eth = function Eth() {
 
 };
 
-core.addProviders(Eth);
+core.addProviders(Apis);
 
 
-module.exports = Eth;
+module.exports = Apis;
 
