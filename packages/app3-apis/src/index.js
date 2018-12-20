@@ -320,6 +320,18 @@ var Apis = function Apis() {
             params: 3,
             inputFormatter: [null, utils.numberToHex, utils.numberToHex]
         }),
+        new Method({
+            name: 'getRecentTransactions',
+            call: 'apis_getRecentTransactions',
+            params: 2,
+            inputFormatter: [utils.numberToHex, utils.numberToHex]
+        }),
+        new Method({
+            name: 'getRecentBlocks',
+            call: 'apis_getRecentBlocks',
+            params: 2,
+            inputFormatter: [utils.numberToHex, utils.numberToHex]
+        }),
 
         // subscriptions
         new Subscriptions({
