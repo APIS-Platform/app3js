@@ -1,6 +1,6 @@
 'use strict';
 
-const isDebug = false;
+const isDebug = true;
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -129,7 +129,6 @@ function createTokenHash(payload, token) {
     var params = payload.params;
     var payId = payload["id"];
 
-
     var paramsStr = "";
     for(var i = 0; i < params.length; i++) {
         if(params[i] !== null && typeof params[i] === 'object') {
@@ -144,7 +143,11 @@ function createTokenHash(payload, token) {
             });
 
             //paramsStr += JSON.stringify(ordered);
-        } else {
+        }
+        else if(typeof params[i] === "undefined") {
+            // Do nothing
+        }
+        else {
             paramsStr += params[i];
         }
     }
