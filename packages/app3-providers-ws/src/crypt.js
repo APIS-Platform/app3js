@@ -1,6 +1,6 @@
 'use strict';
 
-const isDebug = true;
+const isDebug = false;
 
 Object.defineProperty(exports, "__esModule", {
     value: true

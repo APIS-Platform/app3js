@@ -34,8 +34,9 @@ var App3WsProvider = require('app3-providers-ws');
 var options = { timeout: 30000, headers: {authorization: 'Basic username:password'} } // set a custom timeout at 30 seconds, and credentials (you can also add the credentials to the URL: ws://username:password@localhost:8546)
 var ws = new App3WsProvider('ws://localhost:8546', options);
 
-// If you want to communicate with plain text
+// Disable AES encryption and improve communication speed with RPC.
 ws.enableEncryption(false);
+
 ```
 
 
