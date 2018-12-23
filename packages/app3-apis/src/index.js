@@ -332,6 +332,12 @@ var Apis = function Apis() {
             params: 2,
             inputFormatter: [utils.numberToHex, utils.numberToHex]
         }),
+        new Method({
+            name: 'getTransactionCountOnBlocks',
+            call: 'apis_getTransactionCountOnBlocks',
+            params: 2,
+            inputFormatter: [utils.numberToHex, utils.numberToHex]
+        }),
 
         // subscriptions
         new Subscriptions({
