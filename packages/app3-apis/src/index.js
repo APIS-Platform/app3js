@@ -338,6 +338,11 @@ var Apis = function Apis() {
             params: 2,
             inputFormatter: [utils.numberToHex, utils.numberToHex]
         }),
+        new Method({
+            name: 'getTotalCoins',
+            call: 'apis_getTotalCoins',
+            params: 0
+        }),
 
         // subscriptions
         new Subscriptions({
