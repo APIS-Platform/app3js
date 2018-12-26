@@ -9,7 +9,7 @@
     "app3-core": "^0.9.3-3",
     "app3-core-helpers": "^0.9.3-2",
     "app3-core-method": "^0.9.3-2",
-    "app3-utils": "^0.9.3-3"
+    "app3-utils": "^0.9.3-4"
   },
   "description": "App3 module to generate APIS accounts and sign data and transactions.",
   "license": "LGPL-3.0",
@@ -21,8 +21,8 @@
     "url": "https://github.com/APIS-Platform/app3.js"
   },
   "bugs": {
-    "url" : "https://github.com/APIS-Platform/app3.js/issues"
+    "url": "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3-007"
+  "version": "0.9.3-008"
 }

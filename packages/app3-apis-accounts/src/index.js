@@ -86,8 +86,8 @@ var Accounts = function Accounts() {
             call: 'apis_getTransactionCount',
             params: 2,
             inputFormatter: [function (address) {
-                //address = utils.addPrefix0x(address);
-                
+                address = utils.addPrefix0x(address);
+
                 if (utils.isAddress(address)) {
                     return address;
                 } else {
@@ -140,6 +140,8 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
         error = false,
         result;
 
+    privateKey = utils.addPrefix0x(privateKey);
+
     callback = callback || function () {};
 
     if (!tx) {
@@ -177,7 +179,7 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
             transaction.data = tx.data || '0x';
             transaction.value = tx.value || '0x';
             transaction.chainId = utils.numberToHex(tx.chainId);
-            transaction.toMask = tx.toMask || '';
+            transaction.toMask = utils.utf8ToHex(tx.toMask) || '';
 
             var rlpEncoded = RLP.encode([
                 Bytes.fromNat(transaction.nonce),
@@ -292,7 +294,7 @@ Accounts.prototype.authTransaction = function authTransaction(tx, knowledgeKey, 
             transaction.data = tx.data || '0x';
             transaction.value = tx.value || '0x';
             transaction.chainId = utils.numberToHex(tx.chainId);
-            transaction.toMask = tx.toMask || '';
+            transaction.toMask = utils.utf8ToHex(tx.toMask) || '';
 
             var rlpEncoded = RLP.encode([
                 Bytes.fromNat(transaction.nonce),
@@ -359,6 +361,7 @@ Accounts.prototype.authTransaction = function authTransaction(tx, knowledgeKey, 
 
 /* jshint ignore:start */
 Accounts.prototype.recoverTransaction = function recoverTransaction(rawTx) {
+    rawTx = utils.addPrefix0x(rawTx);
     var values = RLP.decode(rawTx);
     var signature = Account.encodeSignature(values.slice(7,10));
     console.log(signature);
@@ -380,7 +383,7 @@ Accounts.prototype.hashMessage = function hashMessage(data) {
 };
 
 Accounts.prototype.sign = function sign(data, privateKey) {
-    //privateKey = utils.addPrefix0x(privateKey);
+    privateKey = utils.addPrefix0x(privateKey);
 
     var hash = this.hashMessage(data);
     var signature = Account.sign(hash, privateKey);
