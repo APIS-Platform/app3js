@@ -343,6 +343,12 @@ var Apis = function Apis() {
             call: 'apis_getTotalCoins',
             params: 0
         }),
+        new Method({
+            name: 'getTransactionCountByAddress',
+            call: 'apis_getTransactionCountByAddress',
+            params: 2,
+            inputFormatter: [null, null]
+        }),
 
         // subscriptions
         new Subscriptions({
