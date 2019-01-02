@@ -349,6 +349,11 @@ var Apis = function Apis() {
             params: 2,
             inputFormatter: [null, null]
         }),
+        new Method({
+            name: 'getMasternodeCount',
+            call: 'apis_getMasternodeCount',
+            params: 0
+        }),
 
         // subscriptions
         new Subscriptions({
