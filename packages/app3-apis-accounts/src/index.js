@@ -179,7 +179,7 @@ Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, ca
             transaction.data = tx.data || '0x';
             transaction.value = tx.value || '0x';
             transaction.chainId = utils.numberToHex(tx.chainId);
-            transaction.toMask = utils.utf8ToHex(tx.toMask) || '';
+            transaction.toMask = tx.toMask ? (utils.utf8ToHex(tx.toMask) || '') : '';
 
             var rlpEncoded = RLP.encode([
                 Bytes.fromNat(transaction.nonce),
