@@ -1,7 +1,7 @@
 {
   "name": "app3-utils",
   "namespace": "APIS",
-  "version": "0.9.3-004",
+  "version": "0.9.3-4",
   "description": "Collection of utility functions used in app3.js.",
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "underscore": "1.8.3",
-    "app3-utils": "^0.9.3"
+    "app3-utils": "^0.9.3-4"
   },
   "description": "App3 core tools helper for sub packages. This is an internal package.",
   "license": "LGPL-3.0",
@@ -16,5 +16,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3-002"
+  "version": "0.9.3-2"
 }

@@ -38,3 +38,4 @@ make.bat
 node_modules
 
 install-test
+package-lock.json

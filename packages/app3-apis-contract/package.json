@@ -7,7 +7,7 @@
     "app3-core-promievent": "^0.9.3-1",
     "app3-core-subscriptions": "^0.9.3-1",
     "app3-apis-abi": "^0.9.3",
-    "app3-utils": "^0.9.3"
+    "app3-utils": "^0.9.3-4"
   },
   "deprecated": false,
   "description": "App3 module to interact with Ethereum smart contracts.",
@@ -23,5 +23,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3-002"
+  "version": "0.9.3-2"
 }

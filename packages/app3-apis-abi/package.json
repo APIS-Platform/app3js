@@ -2,7 +2,7 @@
   "dependencies": {
     "ethers": "4.0.0-beta.1",
     "underscore": "1.8.3",
-    "app3-utils": "^0.9.3"
+    "app3-utils": "^0.9.3-4"
   },
   "deprecated": false,
   "description": "App3 module encode and decode EVM in/output.",
@@ -18,5 +18,5 @@
     "url" : "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3-001"
+  "version": "0.9.3-1"
 }

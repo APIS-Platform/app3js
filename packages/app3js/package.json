@@ -1,0 +1,28 @@
+{
+  "name": "app3js",
+  "namespace": "apisplatform",
+  "version": "0.9.3-7",
+  "description": "APIS JavaScript API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/APIS-Platform/app3.js"
+  },
+  "license": "LGPL-3.0",
+  "main": "src/index.js",
+  "bugs": {
+    "url": "https://github.com/APIS-Platform/app3.js/issues"
+  },
+  "keywords": [
+    "APIS",
+    "JavaScript",
+    "API"
+  ],
+  "dependencies": {
+    "app3-apis": "^0.9.3-10",
+    "app3-apis-personal": "^0.9.3-2",
+    "app3-core": "^0.9.3-3",
+    "app3-net": "^0.9.3-2",
+    "app3-utils": "^0.9.3-4"
+  },
+  "homepage": "https://apisplatform.io"
+}

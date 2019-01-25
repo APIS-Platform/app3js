@@ -2,8 +2,8 @@
   "dependencies": {
     "app3-core-helpers": "^0.9.3",
     "app3-core-method": "^0.9.3",
-    "app3-core-requestmanager": "^0.9.3-1",
-    "app3-utils": "^0.9.3"
+    "app3-core-requestmanager": "^0.9.3-2",
+    "app3-utils": "^0.9.3-4"
   },
   "deprecated": false,
   "description": "App3 core tools for sub packages. This is an internal package.",
@@ -16,8 +16,8 @@
     "url": "https://github.com/APIS-Platform/app3.js"
   },
   "bugs": {
-    "url" : "https://github.com/APIS-Platform/app3.js/issues"
+    "url": "https://github.com/APIS-Platform/app3.js/issues"
   },
   "homepage": "https://apisplatform.io",
-  "version": "0.9.3-003"
+  "version": "0.9.3-3"
 }
