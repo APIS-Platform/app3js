@@ -32413,17 +32413,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               transaction.data = tx.data || '0x';
               transaction.value = tx.value || '0x';
               transaction.chainId = utils.numberToHex(tx.chainId);
-              transaction.toMask = utils.utf8ToHex(tx.toMask) || '';
+              transaction.toMask = tx.toMask ? utils.utf8ToHex(tx.toMask) || '' : '';
 
-              var rlpEncoded = RLP.encode([Bytes.fromNat(transaction.nonce), Bytes.fromNat(transaction.gasPrice), Bytes.fromNat(transaction.gas), transaction.to.toLowerCase(), transaction.toMask, Bytes.fromNat(transaction.value), transaction.data, transaction.r, transaction.s, transaction.v]);
+              var rlpEncoded = RLP.encode([Bytes.fromNat(transaction.nonce), Bytes.fromNat(transaction.gasPrice), Bytes.fromNat(transaction.gas), transaction.to.toLowerCase(), transaction.toMask, Bytes.fromNat(transaction.value), transaction.data, Bytes.fromNat(transaction.chainId || "0x1"), "0x", "0x"]);
 
               var signature = Account.makeSigner(Nat.toNumber(transaction.chainId || "0x1") * 2 + 35)(Hash.keccak256(rlpEncoded), Hash.keccak256(knowledgeKey));
 
-              var rawTx = RLP.decode(rlpEncoded).concat(Account.decodeSignature(signature));
+              var rawTx = RLP.decode(rlpEncoded).slice(0, 7).concat(Account.decodeSignature(signature));
 
-              rawTx[10] = makeEven(trimLeadingZero(rawTx[10]));
-              rawTx[11] = makeEven(trimLeadingZero(rawTx[11]));
-              rawTx[12] = makeEven(trimLeadingZero(rawTx[12]));
+              rawTx[10] = makeEven(trimLeadingZero(rawTx[7]));
+              rawTx[11] = makeEven(trimLeadingZero(rawTx[8]));
+              rawTx[12] = makeEven(trimLeadingZero(rawTx[9]));
+
+              rawTx[7] = makeEven(trimLeadingZero(tx.v));
+              rawTx[8] = makeEven(trimLeadingZero(tx.r));
+              rawTx[9] = makeEven(trimLeadingZero(tx.s));
 
               var rawTransaction = RLP.encode(rawTx);
               var hash = Hash.keccak256(rawTransaction);
@@ -34667,6 +34671,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }), new Method({
           name: 'getMasternodeCount',
           call: 'apis_getMasternodeCount',
+          params: 0
+        }), new Method({
+          name: 'getMasternodeList',
+          call: 'apis_getMnList',
           params: 0
         }),
 

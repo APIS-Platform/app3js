@@ -304,18 +304,22 @@ Accounts.prototype.authTransaction = function authTransaction(tx, knowledgeKey, 
                 transaction.toMask,
                 Bytes.fromNat(transaction.value),
                 transaction.data,
-                transaction.r,
-                transaction.s,
-                transaction.v]);
+                Bytes.fromNat(transaction.chainId || "0x1"),
+                "0x",
+                "0x"]);
 
 
             var signature = Account.makeSigner(Nat.toNumber(transaction.chainId || "0x1") * 2 + 35)(Hash.keccak256(rlpEncoded), Hash.keccak256(knowledgeKey));
 
-            var rawTx = RLP.decode(rlpEncoded).concat(Account.decodeSignature(signature));
+            var rawTx = RLP.decode(rlpEncoded).slice(0, 7).concat(Account.decodeSignature(signature));
 
-            rawTx[10] = makeEven(trimLeadingZero(rawTx[10]));
-            rawTx[11] = makeEven(trimLeadingZero(rawTx[11]));
-            rawTx[12] = makeEven(trimLeadingZero(rawTx[12]));
+            rawTx[10] = makeEven(trimLeadingZero(rawTx[7]));
+            rawTx[11] = makeEven(trimLeadingZero(rawTx[8]));
+            rawTx[12] = makeEven(trimLeadingZero(rawTx[9]));
+
+            rawTx[7] = makeEven(trimLeadingZero(tx.v));
+            rawTx[8] = makeEven(trimLeadingZero(tx.r));
+            rawTx[9] = makeEven(trimLeadingZero(tx.s));
 
             var rawTransaction = RLP.encode(rawTx);
             var hash = Hash.keccak256(rawTransaction);
