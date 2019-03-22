@@ -135,6 +135,194 @@ Accounts.prototype.privateKeyToAccount = function privateKeyToAccount(privateKey
     return this._addAccountFunctions(Account.fromPrivate(privateKey));
 };
 
+
+Accounts.prototype.getEncodedTx = function getEncodedTx(tx, callback) {
+    let _this = this,
+        error = false,
+        result;
+
+    callback = callback || function () {};
+
+    if (!tx) {
+        error = new Error('No transaction object given!');
+
+        callback(error);
+        return Promise.reject(error);
+    }
+
+    function encoded (tx) {
+
+        if (!tx.gas && !tx.gasLimit) {
+            error = new Error('"gas" is missing');
+        }
+
+        if (tx.nonce  < 0 ||
+            tx.gas  < 0 ||
+            tx.gasPrice  < 0 ||
+            tx.chainId  < 0) {
+            error = new Error('Gas, gasPrice, nonce or chainId is lower than 0');
+        }
+
+        if (error) {
+            callback(error);
+            return Promise.reject(error);
+        }
+
+        try {
+            tx = helpers.formatters.inputCallFormatter(tx);
+
+            var transaction = tx;
+            transaction.to = tx.to || '0x';
+            transaction.data = tx.data || '0x';
+            transaction.value = tx.value || '0x';
+            transaction.chainId = utils.numberToHex(tx.chainId);
+            transaction.toMask = tx.toMask ? (utils.utf8ToHex(tx.toMask) || '') : '';
+
+            const rawTransaction = RLP.encode([
+                Bytes.fromNat(transaction.nonce),
+                Bytes.fromNat(transaction.gasPrice),
+                Bytes.fromNat(transaction.gas),
+                transaction.to.toLowerCase(),
+                transaction.toMask,
+                Bytes.fromNat(transaction.value),
+                transaction.data,
+                "0x",
+                "0x",
+                "0x",
+                "0x",
+                "0x",
+                "0x"]);
+
+            result = {
+                encoded: rawTransaction
+            };
+        } catch(e) {
+            callback(e);
+            return Promise.reject(e);
+        }
+
+        callback(null, result);
+        return result;
+    }
+
+    // Resolve immediately if nonce, chainId and price are provided
+    if (tx.nonce !== undefined && tx.chainId !== undefined && tx.gasPrice !== undefined) {
+        return Promise.resolve(encoded(tx));
+    }
+
+
+    // Otherwise, get the missing info from the Ethereum Node
+    return Promise.all([
+        isNot(tx.chainId) ? _this._apisCall.getId() : tx.chainId,
+        isNot(tx.gasPrice) ? _this._apisCall.getGasPrice() : tx.gasPrice,
+        isNot(tx.gas) ? _this._apisCall.estimateGas(tx) : tx.gas,
+        isNot(tx.nonce) ? _this._apisCall.getTransactionCount(_this.privateKeyToAccount(privateKey).address) : tx.nonce
+    ]).then(function (args) {
+        if (isNot(args[0]) || isNot(args[1]) || isNot(args[2]) || isNot(args[3])) {
+            throw new Error('One of the values "chainId", "gasPrice", "gasLimit" or "nonce" couldn\'t be fetched: '+ JSON.stringify(args));
+        }
+        return encoded(_.extend(tx, {chainId: args[0], gasPrice: args[1], gas: args[2], nonce: args[3]}));
+    });
+};
+
+
+
+
+Accounts.prototype.mergeSign = function mergeSign(tx, signature, callback) {
+    let _this = this,
+        error = false,
+        result;
+
+    callback = callback || function () {};
+
+    if (!tx) {
+        error = new Error('No transaction object given!');
+
+        callback(error);
+        return Promise.reject(error);
+    }
+
+    function merged (tx) {
+
+        if (!tx.gas && !tx.gasLimit) {
+            error = new Error('"gas" is missing');
+        }
+
+        if (tx.nonce  < 0 ||
+            tx.gas  < 0 ||
+            tx.gasPrice  < 0 ||
+            tx.chainId  < 0) {
+            error = new Error('Gas, gasPrice, nonce or chainId is lower than 0');
+        }
+
+        if (error) {
+            callback(error);
+            return Promise.reject(error);
+        }
+
+        try {
+            tx = helpers.formatters.inputCallFormatter(tx);
+
+            var transaction = tx;
+            transaction.to = tx.to || '0x';
+            transaction.data = tx.data || '0x';
+            transaction.value = tx.value || '0x';
+            transaction.chainId = utils.numberToHex(tx.chainId);
+            transaction.toMask = tx.toMask ? (utils.utf8ToHex(tx.toMask) || '') : '';
+            transaction.v = signature.v ? utils.numberToHex(Math.floor((Nat.toNumber(signature.v) - 35)/2)) : '0x';
+            transaction.r = signature.r || '0x';
+            transaction.s = signature.s || '0x';
+
+            const rawTransaction = RLP.encode([
+                Bytes.fromNat(transaction.nonce),
+                Bytes.fromNat(transaction.gasPrice),
+                Bytes.fromNat(transaction.gas),
+                transaction.to.toLowerCase(),
+                transaction.toMask,
+                Bytes.fromNat(transaction.value),
+                transaction.data,
+                signature.v.toLowerCase(),
+                signature.r.toLowerCase(),
+                signature.s.toLowerCase(),
+                "0x",
+                "0x",
+                "0x"]);
+
+            const hash = Hash.keccak256(rawTransaction);
+            result = {
+                messageHash: hash,
+                rawTransaction: rawTransaction
+            };
+        } catch(e) {
+            callback(e);
+            return Promise.reject(e);
+        }
+
+        callback(null, result);
+        return result;
+    }
+
+    // Resolve immediately if nonce, chainId and price are provided
+    if (tx.nonce !== undefined && tx.chainId !== undefined && tx.gasPrice !== undefined) {
+        return Promise.resolve(merged(tx));
+    }
+
+
+    // Otherwise, get the missing info from the Ethereum Node
+    return Promise.all([
+        isNot(tx.chainId) ? _this._apisCall.getId() : tx.chainId,
+        isNot(tx.gasPrice) ? _this._apisCall.getGasPrice() : tx.gasPrice,
+        isNot(tx.gas) ? _this._apisCall.estimateGas(tx) : tx.gas,
+        isNot(tx.nonce) ? _this._apisCall.getTransactionCount(_this.privateKeyToAccount(privateKey).address) : tx.nonce
+    ]).then(function (args) {
+        if (isNot(args[0]) || isNot(args[1]) || isNot(args[2]) || isNot(args[3])) {
+            throw new Error('One of the values "chainId", "gasPrice", "gasLimit" or "nonce" couldn\'t be fetched: '+ JSON.stringify(args));
+        }
+        return merged(_.extend(tx, {chainId: args[0], gasPrice: args[1], gas: args[2], nonce: args[3]}));
+    });
+};
+
+
 Accounts.prototype.signTransaction = function signTransaction(tx, privateKey, callback) {
     var _this = this,
         error = false,
